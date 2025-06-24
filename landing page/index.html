@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <title>AriseApp</title>
+  <style>
+    /* FONDO VERDE NATURALEZA */
+    html, body {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #eaf6e3;
+      background-image: url(img/arte-digital-hermosas-montanas.jpg);
+      background-size: cover;
+      background-repeat: no-repeat;
+      background-position: center;
+      background-attachment: fixed;
+      color: white;
+    }
+
+    .header {
+      text-align: center;
+      padding: 50px 20px 30px;
+      background-color: rgba(0, 100, 0, 0.6);
+    }
+
+    .header h1 {
+      font-size: 48px;
+      margin: 0;
+      color: #ffffff;
+    }
+
+    .header p {
+      font-size: 18px;
+      margin-top: 10px;
+      color: #c9f5d3;
+    }
+
+    .seccion {
+      background-color: rgba(255, 255, 255, 0.95);
+      color: #2c3e50;
+      max-width: 700px;
+      margin: 30px auto;
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+    }
+
+    .seccion h2 {
+      margin-bottom: 10px;
+    }
+
+    .seccion input {
+      padding: 10px;
+      width: 60%;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+      margin-right: 10px;
+      margin-bottom: 10px;
+    }
+
+    .seccion button {
+      padding: 10px 14px;
+      border: none;
+      border-radius: 6px;
+      background-color: #2e8b57;
+      color: white;
+      cursor: pointer;
+      margin-bottom: 10px;
+      transition: background-color 0.3s;
+    }
+
+    .seccion button:hover {
+      background-color: #246b45;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 15px;
+    }
+
+    th, td {
+      border: 1px solid #ccc;
+      padding: 10px;
+      text-align: left;
+    }
+
+    th {
+      background-color: #4caf50;
+      color: white;
+    }
+
+    tr:nth-child(even) {
+      background-color: #f2f2f2;
+    }
+
+     .eliminar-btn {
+    background-color: #ff2c2c !important;
+    color: white !important;
+    padding: 6px 10px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: bold;
+  }
+
+  .eliminar-btn:hover {
+    background-color: #cc0000 !important;
+    }
+  </style>
+</head>
+<body>
+
+  <header class="header">
+    <h1>AriseApp</h1>
+    <p>“ Impulsa la conciencia ambiental a través de desafíos ecológicos personalizados”</p>
+    <p>Explora, conecta y gestiona con armonía 🌿</p>
+  </header>
+
+  <!-- Secciones -->
+  <section class="seccion" id="foros">
+  <h2>🗨️ Foros</h2>
+  <input type="text" id="foroInput" placeholder="Nombre del foro" />
+  <button onclick="registrar('foro')">Registrar</button>
+  <button onclick="listar('foro')">Listar</button>
+  <button onclick="actualizar('foro')">Actualizar</button>
+  <div id="foroTablaContainer"></div>
+</section>
+
+<section class="seccion" id="donaciones">
+  <h2>💰 Donaciones</h2>
+  <input type="text" id="donacionInput" placeholder="Descripción de donación" />
+  <button onclick="registrar('donacion')">Registrar</button>
+  <button onclick="listar('donacion')">Listar</button>
+  <button onclick="actualizar('donacion')">Actualizar</button>
+  <div id="donacionTablaContainer"></div>
+</section>
+
+<section class="seccion" id="usuarios">
+  <h2>👤 Usuarios</h2>
+  <input type="text" id="usuarioInput" placeholder="Nombre del usuario" />
+  <button onclick="registrar('usuario')">Registrar</button>
+  <button onclick="listar('usuario')">Listar</button>
+  <button onclick="actualizar('usuario')">Actualizar</button>
+  <div id="usuarioTablaContainer"></div>
+</section>
+
+<section class="seccion" id="recompensas">
+  <h2>⭐ Recompensas</h2>
+  <input type="text" id="recompensaInput" placeholder="Nombre de la recompensa" />
+  <button onclick="registrar('recompensa')">Registrar</button>
+  <button onclick="listar('recompensa')">Listar</button>
+  <button onclick="actualizar('recompensa')">Actualizar</button>
+  <div id="recompensaTablaContainer"></div>
+</section>
+
+  <script>
+  const data = {
+    foro: [],
+    donacion: [],
+    usuario: [],
+    recompensa: [],
+  };
+
+  function registrar(tipo) {
+    const input = document.getElementById(`${tipo}Input`);
+    const valor = input.value.trim();
+
+    if (valor === "") {
+      alert("Por favor ingresa un valor.");
+      return;
+    }
+
+    data[tipo].push(valor);
+    input.value = "";
+    // Ya NO se lista automáticamente aquí
+  }
+
+  function listar(tipo) {
+    const container = document.getElementById(`${tipo}TablaContainer`);
+    container.innerHTML = "";
+
+    if (data[tipo].length === 0) {
+      container.innerHTML = "<p>No hay registros aún.</p>";
+      return;
+    }
+
+    const tabla = document.createElement("table");
+    const thead = document.createElement("thead");
+    const tbody = document.createElement("tbody");
+
+    thead.innerHTML = `
+      <tr>
+        <th>#</th>
+        <th>${tipo.charAt(0).toUpperCase() + tipo.slice(1)}</th>
+        <th>Acciones</th>
+      </tr>
+    `;
+
+    data[tipo].forEach((item, index) => {
+      const fila = document.createElement("tr");
+      fila.innerHTML = `
+        <td>${index + 1}</td>
+        <td>${item}</td>
+        <td><button class="eliminar-btn" onclick="eliminar('${tipo}', ${index})">Eliminar</button></td>
+      `;
+      tbody.appendChild(fila);
+    });
+
+    tabla.appendChild(thead);
+    tabla.appendChild(tbody);
+    container.appendChild(tabla);
+  }
+
+  function actualizar(tipo) {
+    // Actualiza visualmente la tabla con los datos actuales
+    listar(tipo);
+  }
+
+  function eliminar(tipo, index) {
+    if (confirm("¿Seguro que deseas eliminar este elemento?")) {
+      data[tipo].splice(index, 1);
+      listar(tipo);
+    }
+  }
+</script>
+</body>
+</html>
